@@ -1,7 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ArtistaController;
+use App\Http\Controllers\CDController;
+use App\Http\Controllers\GravadoraController;
+use App\Http\Controllers\DistribuidoraController;
+use App\Http\Controllers\TrilhaController;
+use App\Http\Controllers\GeneroMusicalController;
+use App\Http\Controllers\BoxCDController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +22,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('artista', ArtistaController::class);
+Route::resource('cd', CDController::class);
+Route::resource('gravadora', GravadoraController::class);
+Route::resource('distribuidora', DistribuidoraController::class);
+Route::resource('trilha', TrilhaController::class);
+Route::resource('genero-musical', GeneroMusicalController::class);
+Route::resource('box-cd', BoxCDController::class);
