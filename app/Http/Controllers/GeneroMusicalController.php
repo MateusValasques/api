@@ -4,82 +4,116 @@ namespace App\Http\Controllers;
 
 use App\Models\GeneroMusical;
 use Illuminate\Http\Request;
+use DB;
+use SimpleXMLElement;
 
 class GeneroMusicalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index_json()
     {
-        //
+        $genero_musicals = GeneroMusical::all();
+        $json = json_encode($genero_musicals);
+
+       
+    
+        dd ($json);
+    }
+    public function index_xml()
+    {
+        $genero_musicals = GeneroMusical::all();
+    }
+    
+    public function store_json(Request $request)
+    {
+        
+        $genero_musical = new GeneroMusical();
+        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
+        $genero_musical->data_nasc = $request->data_nasc;
+        $genero_musical->genero = $request->genero;
+        $genero_musical->peso = $request->peso;
+        $genero_musical->altura = $request->altura;
+        $genero_musical->ulr_foto = $request->ulr_foto;
+        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+
+        DB::transaction(function() use ($genero_musical) {
+
+            $genero_musical->save();
+
+        });
+    }
+    public function store_xml(Request $request)
+    {
+        $request = simplexml_load_string($request->getBody());
+        
+        $genero_musical = new GeneroMusical();
+        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
+        $genero_musical->data_nasc = $request->data_nasc;
+        $genero_musical->genero = $request->genero;
+        $genero_musical->peso = $request->peso;
+        $genero_musical->altura = $request->altura;
+        $genero_musical->ulr_foto = $request->ulr_foto;
+        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+
+        DB::transaction(function() use ($genero_musical) {
+
+            $genero_musical->save();
+
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function update_json(Request $request, GeneroMusical $genero_musical)
     {
-        //
+        $genero_musical = GeneroMusical::find($request->nome_genero_musical);
+        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
+        $genero_musical->data_nasc = $request->data_nasc;
+        $genero_musical->genero = $request->genero;
+        $genero_musical->peso = $request->peso;
+        $genero_musical->altura = $request->altura;
+        $genero_musical->ulr_foto = $request->ulr_foto;
+        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+
+        DB::transaction(function() use ($genero_musical) {
+
+            $genero_musical->save();
+
+        });
+    }
+    public function update_xml(Request $request, GeneroMusical $genero_musical)
+    {
+        $request = simplexml_load_string($request->getBody());
+        $genero_musical = GeneroMusical::find($request->nome_genero_musical);
+        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
+        $genero_musical->data_nasc = $request->data_nasc;
+        $genero_musical->genero = $request->genero;
+        $genero_musical->peso = $request->peso;
+        $genero_musical->altura = $request->altura;
+        $genero_musical->ulr_foto = $request->ulr_foto;
+        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+
+        DB::transaction(function() use ($genero_musical) {
+
+            $genero_musical->save();
+
+        });
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function destroy_json(GeneroMusical $genero_musical)
     {
-        //
+        try {
+            $excluir =  GeneroMusical::destroy($genero_musical->nome_genero_musical);
+            return response()->json(array('status' => "OK"));
+        } catch (\Exception  $erro) {
+            return response()->json(array('erro' => "$erro"));
+        }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\GeneroMusical  $generoMusical
-     * @return \Illuminate\Http\Response
-     */
-    public function show(GeneroMusical $generoMusical)
+    public function destroy_xml(GeneroMusical $genero_musical)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\GeneroMusical  $generoMusical
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GeneroMusical $generoMusical)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GeneroMusical  $generoMusical
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GeneroMusical $generoMusical)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\GeneroMusical  $generoMusical
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GeneroMusical $generoMusical)
-    {
-        //
+        $request = simplexml_load_string($request->getBody());
+        try {
+            $excluir =  GeneroMusical::destroy($genero_musical->nome_genero_musical);
+            return response()->json(array('status' => "OK"));
+        } catch (\Exception  $erro) {
+            return response()->json(array('erro' => "$erro"));
+        }
     }
 }
