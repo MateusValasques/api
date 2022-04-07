@@ -34,6 +34,21 @@ $(document).ready(function($) {
             },
         });
     });
+
+    $('#cadastrar_artista_xml').click(function() {
+        
+        $.ajax({ type: "POST",
+            url: "http://api.local/artista/store-xml",
+            data: "<xml><id>1</id><nome_artista>Nome Teste</nome_artista><data_nasc>2000-02-20</data_nasc><genero>M</genero><peso>M</peso><altura>M</altura><ulr_foto>M</ulr_foto><detalhes_artista>M</detalhes_artista></xml>",
+            contentType: "text/xml",
+            dataType: "xml",
+            cache: false,
+            error: function() {  },
+            success: function(data) {
+                alert("Cadastrado por XML com Sucesso");
+            }
+        });
+    });
     $('#alterar_artista').click(function() {
         var artista = {
             id: 1,
@@ -63,7 +78,22 @@ $(document).ready(function($) {
                 alert("Alterado com Sucesso"); 
             },
         });
-    });$('#excluir_artista').click(function() {
+    });
+    $('#alterar_artista_xml').click(function() {
+        
+        $.ajax({ type: "POST",
+            url: "http://api.local/artista/update-xml",
+            data: "<xml><id>1</id><nome_artista>Nome Alterado</nome_artista><data_nasc>2000-02-20</data_nasc><genero>M</genero><peso>M</peso><altura>M</altura><ulr_foto>M</ulr_foto><detalhes_artista>M</detalhes_artista></xml>",
+            contentType: "text/xml",
+            dataType: "xml",
+            cache: false,
+            error: function() {  },
+            success: function(data) {
+                alert("Alterado por XML com Sucesso");
+            }
+        });
+    });
+    $('#excluir_artista').click(function() {
         var artista = {
             id: 1,
         }
@@ -84,6 +114,20 @@ $(document).ready(function($) {
                 
                 alert("Excluido com Sucesso"); 
             },
+        });
+    });
+    $('#excluir_artista_xml').click(function() {
+        
+        $.ajax({ type: "POST",
+            url: "http://api.local/artista/destroy-xml",
+            data: "<xml><id>1</id><nome_artista>Nome Teste</nome_artista><data_nasc>2000-02-20</data_nasc><genero>M</genero><peso>M</peso><altura>M</altura><ulr_foto>M</ulr_foto><detalhes_artista>M</detalhes_artista></xml>",
+            contentType: "text/xml",
+            dataType: "xml",
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                alert("Excluido por XML com Sucesso");
+            }
         });
     });
 });

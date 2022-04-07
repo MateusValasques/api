@@ -24,12 +24,13 @@ class BoxCDController extends Controller
     
     public function store_json(Request $request)
     {
-        
+
+        $request = $request->json()->all();
         $box_cd = new BoxCD();
-        $box_cd->id_box = $request->id_box;
-        $box_cd->nome_box = $request->nome_box;
-        $box_cd->total_no_box = $request->total_no_box;
-        $box_cd->codigo_grava = $request->codigo_grava;
+        $box_cd->id_box = $request["id_box"];
+        $box_cd->nome_box = $request["nome_box"];
+        $box_cd->total_no_box = $request["total_no_box"];
+        $box_cd->codigo_grava = $request["codigo_grava"];
 
         DB::transaction(function() use ($box_cd) {
 
@@ -39,13 +40,13 @@ class BoxCDController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         
         $box_cd = new BoxCD();
-        $box_cd->id_box = $request->id_box;
-        $box_cd->nome_box = $request->nome_box;
-        $box_cd->total_no_box = $request->total_no_box;
-        $box_cd->codigo_grava = $request->codigo_grava;
+        $box_cd->id_box = (string)$xml->id_box;
+        $box_cd->nome_box = (string)$xml->nome_box;
+        $box_cd->total_no_box = (int)$xml->total_no_box;
+        $box_cd->codigo_grava = (string)$xml->codigo_grava;
 
         DB::transaction(function() use ($box_cd) {
 
@@ -56,11 +57,12 @@ class BoxCDController extends Controller
 
     public function update_json(Request $request, BoxCD $box_cd)
     {
-        $box_cd = BoxCD::find($request->nome_box_cd);
-        $box_cd->id_box = $request->id_box;
-        $box_cd->nome_box = $request->nome_box;
-        $box_cd->total_no_box = $request->total_no_box;
-        $box_cd->codigo_grava = $request->codigo_grava;
+        $request = $request->json()->all();
+        $box_cd = BoxCD::find($request["id_box"]);
+        $box_cd->id_box = $request["id_box"];
+        $box_cd->nome_box = $request["nome_box"];
+        $box_cd->total_no_box = $request["total_no_box"];
+        $box_cd->codigo_grava = $request["codigo_grava"];
 
         DB::transaction(function() use ($box_cd) {
 
@@ -70,12 +72,12 @@ class BoxCDController extends Controller
     }
     public function update_xml(Request $request, BoxCD $box_cd)
     {
-        $request = simplexml_load_string($request->getBody());
-        $box_cd = BoxCD::find($request->nome_box_cd);
-        $box_cd->id_box = $request->id_box;
-        $box_cd->nome_box = $request->nome_box;
-        $box_cd->total_no_box = $request->total_no_box;
-        $box_cd->codigo_grava = $request->codigo_grava;
+        $xml = simplexml_load_string($request->getContent());
+        $box_cd = BoxCD::find((string)$xml->id_box);
+        $box_cd->id_box = (string)$xml->id_box;
+        $box_cd->nome_box = (string)$xml->nome_box;
+        $box_cd->total_no_box = (int)$xml->total_no_box;
+        $box_cd->codigo_grava = (string)$xml->codigo_grava;
 
         DB::transaction(function() use ($box_cd) {
 
@@ -84,23 +86,20 @@ class BoxCDController extends Controller
         });
     }
 
-    public function destroy_json(BoxCD $box_cd)
+    public function destroy_json(Request $request)
     {
+        $request = $request->json()->all();
         try {
-            $excluir =  BoxCD::destroy($box_cd->nome_box_cd);
-            return response()->json(array('status' => "OK"));
+            $excluir =  BoxCD::destroy($request["id_box"]);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(BoxCD $box_cd)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  BoxCD::destroy($box_cd->nome_box_cd);
-            return response()->json(array('status' => "OK"));
+            $excluir =  BoxCD::destroy((string)$xml->id_box);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

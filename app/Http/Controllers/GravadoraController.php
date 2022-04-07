@@ -25,15 +25,11 @@ class GravadoraController extends Controller
     
     public function store_json(Request $request)
     {
-        
+        $request = $request->json()->all();
         $gravadora = new Gravadora();
-        $gravadora->nome_gravadora = $request->nome_gravadora;
-        $gravadora->data_nasc = $request->data_nasc;
-        $gravadora->genero = $request->genero;
-        $gravadora->peso = $request->peso;
-        $gravadora->altura = $request->altura;
-        $gravadora->ulr_foto = $request->ulr_foto;
-        $gravadora->detalhes_gravadora = $request->detalhes_gravadora;
+        $gravadora->codigo_grava = $request['codigo_grava'];
+        $gravadora->nome_grava = $request['nome_grava'];
+        $gravadora->detalhes_grava = $request['detalhes_grava'];
 
         DB::transaction(function() use ($gravadora) {
 
@@ -43,16 +39,12 @@ class GravadoraController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         
         $gravadora = new Gravadora();
-        $gravadora->nome_gravadora = $request->nome_gravadora;
-        $gravadora->data_nasc = $request->data_nasc;
-        $gravadora->genero = $request->genero;
-        $gravadora->peso = $request->peso;
-        $gravadora->altura = $request->altura;
-        $gravadora->ulr_foto = $request->ulr_foto;
-        $gravadora->detalhes_gravadora = $request->detalhes_gravadora;
+        $gravadora->codigo_grava = (string)$xml->codigo_grava;
+        $gravadora->nome_grava = (string)$xml->nome_grava;
+        $gravadora->detalhes_grava = (string)$xml->detalhes_grava;
 
         DB::transaction(function() use ($gravadora) {
 
@@ -63,14 +55,11 @@ class GravadoraController extends Controller
 
     public function update_json(Request $request, Gravadora $gravadora)
     {
-        $gravadora = Gravadora::find($request->nome_gravadora);
-        $gravadora->nome_gravadora = $request->nome_gravadora;
-        $gravadora->data_nasc = $request->data_nasc;
-        $gravadora->genero = $request->genero;
-        $gravadora->peso = $request->peso;
-        $gravadora->altura = $request->altura;
-        $gravadora->ulr_foto = $request->ulr_foto;
-        $gravadora->detalhes_gravadora = $request->detalhes_gravadora;
+        $request = $request->json()->all();
+        $gravadora = Gravadora::find($request['codigo_grava']);
+        $gravadora->codigo_grava = $request['codigo_grava'];
+        $gravadora->nome_grava = $request['nome_grava'];
+        $gravadora->detalhes_grava = $request['detalhes_grava'];
 
         DB::transaction(function() use ($gravadora) {
 
@@ -80,15 +69,11 @@ class GravadoraController extends Controller
     }
     public function update_xml(Request $request, Gravadora $gravadora)
     {
-        $request = simplexml_load_string($request->getBody());
-        $gravadora = Gravadora::find($request->nome_gravadora);
-        $gravadora->nome_gravadora = $request->nome_gravadora;
-        $gravadora->data_nasc = $request->data_nasc;
-        $gravadora->genero = $request->genero;
-        $gravadora->peso = $request->peso;
-        $gravadora->altura = $request->altura;
-        $gravadora->ulr_foto = $request->ulr_foto;
-        $gravadora->detalhes_gravadora = $request->detalhes_gravadora;
+        $xml = simplexml_load_string($request->getContent());
+        $gravadora = Gravadora::find((string)$xml->codigo_grava);
+        $gravadora->codigo_grava = (string)$xml->codigo_grava;
+        $gravadora->nome_grava = (string)$xml->nome_grava;
+        $gravadora->detalhes_grava = (string)$xml->detalhes_grava;
 
         DB::transaction(function() use ($gravadora) {
 
@@ -97,23 +82,21 @@ class GravadoraController extends Controller
         });
     }
 
-    public function destroy_json(Gravadora $gravadora)
+    public function destroy_json(Request $request)
     {
+
+        $request = $request->json()->all();
         try {
-            $excluir =  Gravadora::destroy($gravadora->nome_gravadora);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Gravadora::destroy($request['codigo_grava']);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(Gravadora $gravadora)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  Gravadora::destroy($gravadora->nome_gravadora);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Gravadora::destroy((string)$xml->codigo_grava);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

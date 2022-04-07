@@ -44,22 +44,24 @@ class ArtistaController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         
         $artista = new Artista();
-        $artista->nome_artista = $request->nome_artista;
-        $artista->data_nasc = $request->data_nasc;
-        $artista->genero = $request->genero;
-        $artista->peso = $request->peso;
-        $artista->altura = $request->altura;
-        $artista->ulr_foto = $request->ulr_foto;
-        $artista->detalhes_artista = $request->detalhes_artista;
+        $artista->id = (int)$xml->id;
+        $artista->nome_artista = (string)$xml->nome_artista;
+        $artista->data_nasc = (string)$xml->data_nasc;
+        $artista->genero = (string)$xml->genero;
+        $artista->peso = (string)$xml->peso;
+        $artista->altura = (string)$xml->altura;
+        $artista->ulr_foto = (string)$xml->ulr_foto;
+        $artista->detalhes_artista = (string)$xml->detalhes_artista;
 
         DB::transaction(function() use ($artista) {
 
             $artista->save();
 
         });
+        
     }
 
     public function update_json(Request $request, Artista $artista)
@@ -83,15 +85,16 @@ class ArtistaController extends Controller
     }
     public function update_xml(Request $request, Artista $artista)
     {
-        $request = simplexml_load_string($request->getBody());
-        $artista = Artista::find($request->nome_artista);
-        $artista->nome_artista = $request->nome_artista;
-        $artista->data_nasc = $request->data_nasc;
-        $artista->genero = $request->genero;
-        $artista->peso = $request->peso;
-        $artista->altura = $request->altura;
-        $artista->ulr_foto = $request->ulr_foto;
-        $artista->detalhes_artista = $request->detalhes_artista;
+        $xml = simplexml_load_string($request->getContent());
+        $artista = Artista::find((int)$xml->id);
+        $artista->id = (int)$xml->id;
+        $artista->nome_artista = (string)$xml->nome_artista;
+        $artista->data_nasc = (string)$xml->data_nasc;
+        $artista->genero = (string)$xml->genero;
+        $artista->peso = (string)$xml->peso;
+        $artista->altura = (string)$xml->altura;
+        $artista->ulr_foto = (string)$xml->ulr_foto;
+        $artista->detalhes_artista = (string)$xml->detalhes_artista;
 
         DB::transaction(function() use ($artista) {
 
@@ -104,19 +107,15 @@ class ArtistaController extends Controller
         $request = $request->json()->all();
         try {
             $excluir =  Artista::destroy($request["id"]);
-            return response()->json(array('status' => "OK"));
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(Artista $artista)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  Artista::destroy($artista->nome_artista);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Artista::destroy((int)$xml->id);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

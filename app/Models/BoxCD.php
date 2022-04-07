@@ -10,4 +10,6 @@ class BoxCD extends Model
     
     use HasFactory;
     public $timestamps = false;
+    public $table = "box_cds";
+    protected $primaryKey = 'id_box';
 }

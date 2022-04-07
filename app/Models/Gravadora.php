@@ -9,4 +9,5 @@ class Gravadora extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'codigo_grava';
 }
