@@ -20,7 +20,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdH3GZHGgKVVLuNJQR0BOFrnp78FPcAzQ&callback=initMap&v=weekly"
+        src="https://maps.googleapis.com/maps/api/js?key="
         async></script>
 
 </body>
