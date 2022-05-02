@@ -26,14 +26,10 @@ class GeneroMusicalController extends Controller
     public function store_json(Request $request)
     {
         
+        $request = $request->json()->all();
         $genero_musical = new GeneroMusical();
-        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
-        $genero_musical->data_nasc = $request->data_nasc;
-        $genero_musical->genero = $request->genero;
-        $genero_musical->peso = $request->peso;
-        $genero_musical->altura = $request->altura;
-        $genero_musical->ulr_foto = $request->ulr_foto;
-        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+        $genero_musical->codigo_gene = $request['codigo_gene'];
+        $genero_musical->descricao_genero = $request['descricao_genero'];
 
         DB::transaction(function() use ($genero_musical) {
 
@@ -43,16 +39,11 @@ class GeneroMusicalController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         
         $genero_musical = new GeneroMusical();
-        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
-        $genero_musical->data_nasc = $request->data_nasc;
-        $genero_musical->genero = $request->genero;
-        $genero_musical->peso = $request->peso;
-        $genero_musical->altura = $request->altura;
-        $genero_musical->ulr_foto = $request->ulr_foto;
-        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+        $genero_musical->codigo_gene = $xml->codigo_gene;
+        $genero_musical->descricao_genero = $xml->descricao_genero;
 
         DB::transaction(function() use ($genero_musical) {
 
@@ -63,14 +54,10 @@ class GeneroMusicalController extends Controller
 
     public function update_json(Request $request, GeneroMusical $genero_musical)
     {
-        $genero_musical = GeneroMusical::find($request->nome_genero_musical);
-        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
-        $genero_musical->data_nasc = $request->data_nasc;
-        $genero_musical->genero = $request->genero;
-        $genero_musical->peso = $request->peso;
-        $genero_musical->altura = $request->altura;
-        $genero_musical->ulr_foto = $request->ulr_foto;
-        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+        $request = $request->json()->all();
+        $genero_musical = GeneroMusical::find($request['codigo_gene']);
+        $genero_musical->codigo_gene = $request['codigo_gene'];
+        $genero_musical->descricao_genero = $request['descricao_genero'];
 
         DB::transaction(function() use ($genero_musical) {
 
@@ -80,15 +67,10 @@ class GeneroMusicalController extends Controller
     }
     public function update_xml(Request $request, GeneroMusical $genero_musical)
     {
-        $request = simplexml_load_string($request->getBody());
-        $genero_musical = GeneroMusical::find($request->nome_genero_musical);
-        $genero_musical->nome_genero_musical = $request->nome_genero_musical;
-        $genero_musical->data_nasc = $request->data_nasc;
-        $genero_musical->genero = $request->genero;
-        $genero_musical->peso = $request->peso;
-        $genero_musical->altura = $request->altura;
-        $genero_musical->ulr_foto = $request->ulr_foto;
-        $genero_musical->detalhes_genero_musical = $request->detalhes_genero_musical;
+        $xml = simplexml_load_string($request->getContent());
+        $genero_musical = GeneroMusical::find($xml->codigo_gene);
+        $genero_musical->codigo_gene = $xml->codigo_gene;
+        $genero_musical->descricao_genero = $xml->descricao_genero;
 
         DB::transaction(function() use ($genero_musical) {
 
@@ -97,23 +79,20 @@ class GeneroMusicalController extends Controller
         });
     }
 
-    public function destroy_json(GeneroMusical $genero_musical)
+    public function destroy_json(Request $request)
     {
+        $request = $request->json()->all();
         try {
-            $excluir =  GeneroMusical::destroy($genero_musical->nome_genero_musical);
-            return response()->json(array('status' => "OK"));
+            $excluir =  GeneroMusical::destroy($request['codigo_gene']);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(GeneroMusical $genero_musical)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  GeneroMusical::destroy($genero_musical->nome_genero_musical);
-            return response()->json(array('status' => "OK"));
+            $excluir =  GeneroMusical::destroy($xml->codigo_gene);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

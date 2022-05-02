@@ -8,6 +8,7 @@ use App\Http\Controllers\DistribuidoraController;
 use App\Http\Controllers\TrilhaController;
 use App\Http\Controllers\GeneroMusicalController;
 use App\Http\Controllers\BoxCDController;
+use App\Http\Controllers\TesteMapsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +22,12 @@ use App\Http\Controllers\BoxCDController;
 
 Route::get('/', function () {
     return view('teste');
+});
+Route::get('teste-maps', function () {
+    return view('teste_api_maps');
+});
+Route::group(['prefix' => 'teste-maps', 'where' => ['prefix' => 'teste-maps']], function () {
+    Route::get('/index', ['uses' => 'TesteMapsController@index']);
 });
 Route::group(['prefix' => 'artista', 'where' => ['prefix' => 'artista']], function () {
     Route::get('/index-json', ['uses' => 'ArtistaController@index_json']);

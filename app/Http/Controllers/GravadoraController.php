@@ -14,8 +14,6 @@ class GravadoraController extends Controller
         $gravadoras = Gravadora::all();
         $json = json_encode($gravadoras);
 
-       
-    
         dd ($json);
     }
     public function index_xml()

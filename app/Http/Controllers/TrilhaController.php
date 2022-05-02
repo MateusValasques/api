@@ -25,15 +25,14 @@ class TrilhaController extends Controller
     
     public function store_json(Request $request)
     {
+        $request = $request->json()->all();
         
         $trilha = new Trilha();
-        $trilha->nome_trilha = $request->nome_trilha;
-        $trilha->data_nasc = $request->data_nasc;
-        $trilha->genero = $request->genero;
-        $trilha->peso = $request->peso;
-        $trilha->altura = $request->altura;
-        $trilha->ulr_foto = $request->ulr_foto;
-        $trilha->detalhes_trilha = $request->detalhes_trilha;
+        $trilha->id = $request['id'];
+        $trilha->id_cd = $request['id_cd'];
+        $trilha->duracao = $request['duracao'];
+        $trilha->titulo_trilha = $request['titulo_trilha'];
+        $trilha->comentario = $request['comentario'];
 
         DB::transaction(function() use ($trilha) {
 
@@ -44,79 +43,68 @@ class TrilhaController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         $trilha = new Trilha();
-        $trilha->nome_trilha = $request->nome_trilha;
-        $trilha->data_nasc = $request->data_nasc;
-        $trilha->genero = $request->genero;
-        $trilha->peso = $request->peso;
-        $trilha->altura = $request->altura;
-        $trilha->ulr_foto = $request->ulr_foto;
-        $trilha->detalhes_trilha = $request->detalhes_trilha;
+        $trilha->id = $xml->id;
+        $trilha->id_cd = $xml->id_cd;
+        $trilha->duracao = $xml->duracao;
+        $trilha->titulo_trilha = $xml->titulo_trilha;
+        $trilha->comentario = $xml->comentario;
 
         DB::transaction(function() use ($trilha) {
 
             $trilha->save();
 
         });
-        //deve retornar alguma informação?
     }
 
     public function update_json(Request $request, Trilha $trilha)
     {
-        $trilha = Trilha::find($request->nome_trilha);
-        $trilha->nome_trilha = $request->nome_trilha;
-        $trilha->data_nasc = $request->data_nasc;
-        $trilha->genero = $request->genero;
-        $trilha->peso = $request->peso;
-        $trilha->altura = $request->altura;
-        $trilha->ulr_foto = $request->ulr_foto;
-        $trilha->detalhes_trilha = $request->detalhes_trilha;
+        $request = $request->json()->all();
+        $trilha = Trilha::find($request['id']);
+        $trilha->id = $request['id'];
+        $trilha->id_cd = $request['id_cd'];
+        $trilha->duracao = $request['duracao'];
+        $trilha->titulo_trilha = $request['titulo_trilha'];
+        $trilha->comentario = $request['comentario'];
 
         DB::transaction(function() use ($trilha) {
 
             $trilha->save();
 
         });
-        //deve retornar alguma informação?
     }
     public function update_xml(Request $request, Trilha $trilha)
     {
-        $request = simplexml_load_string($request->getBody());
-        $trilha = Trilha::find($request->nome_trilha);
-        $trilha->nome_trilha = $request->nome_trilha;
-        $trilha->data_nasc = $request->data_nasc;
-        $trilha->genero = $request->genero;
-        $trilha->peso = $request->peso;
-        $trilha->altura = $request->altura;
-        $trilha->ulr_foto = $request->ulr_foto;
-        $trilha->detalhes_trilha = $request->detalhes_trilha;
+        $xml = simplexml_load_string($request->getContent());
+        $trilha = Trilha::find($xml->id);
+        $trilha->id = $xml->id;
+        $trilha->id_cd = $xml->id_cd;
+        $trilha->duracao = $xml->duracao;
+        $trilha->titulo_trilha = $xml->titulo_trilha;
+        $trilha->comentario = $xml->comentario;
 
         DB::transaction(function() use ($trilha) {
 
             $trilha->save();
 
         });
-        //deve retornar alguma informação?
     }
 
-    public function destroy_json(Trilha $trilha)
+    public function destroy_json(Request $request)
     {
+        $request = $request->json()->all();
         try {
-            $excluir =  Trilha::destroy($trilha->nome_trilha);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Trilha::destroy($request['id']);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(Trilha $trilha)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  Trilha::destroy($trilha->nome_trilha);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Trilha::destroy($xml->id);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

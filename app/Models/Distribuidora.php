@@ -9,4 +9,6 @@ class Distribuidora extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    
+    protected $primaryKey = 'codigo_dist';
 }

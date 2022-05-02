@@ -25,15 +25,11 @@ class DistribuidoraController extends Controller
     
     public function store_json(Request $request)
     {
+        $request = $request->json()->all();
         
         $distribuidora = new Distribuidora();
-        $distribuidora->nome_distribuidora = $request->nome_distribuidora;
-        $distribuidora->data_nasc = $request->data_nasc;
-        $distribuidora->genero = $request->genero;
-        $distribuidora->peso = $request->peso;
-        $distribuidora->altura = $request->altura;
-        $distribuidora->ulr_foto = $request->ulr_foto;
-        $distribuidora->detalhes_distribuidora = $request->detalhes_distribuidora;
+        $distribuidora->codigo_dist = $request['codigo_dist'];
+        $distribuidora->descricao_dist = $request['descricao_dist'];
 
         DB::transaction(function() use ($distribuidora) {
 
@@ -43,16 +39,11 @@ class DistribuidoraController extends Controller
     }
     public function store_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         
         $distribuidora = new Distribuidora();
-        $distribuidora->nome_distribuidora = $request->nome_distribuidora;
-        $distribuidora->data_nasc = $request->data_nasc;
-        $distribuidora->genero = $request->genero;
-        $distribuidora->peso = $request->peso;
-        $distribuidora->altura = $request->altura;
-        $distribuidora->ulr_foto = $request->ulr_foto;
-        $distribuidora->detalhes_distribuidora = $request->detalhes_distribuidora;
+        $distribuidora->codigo_dist = (string)$xml->codigo_dist;
+        $distribuidora->descricao_dist = (string)$xml->descricao_dist;
 
         DB::transaction(function() use ($distribuidora) {
 
@@ -63,14 +54,12 @@ class DistribuidoraController extends Controller
 
     public function update_json(Request $request, Distribuidora $distribuidora)
     {
-        $distribuidora = Distribuidora::find($request->nome_distribuidora);
-        $distribuidora->nome_distribuidora = $request->nome_distribuidora;
-        $distribuidora->data_nasc = $request->data_nasc;
-        $distribuidora->genero = $request->genero;
-        $distribuidora->peso = $request->peso;
-        $distribuidora->altura = $request->altura;
-        $distribuidora->ulr_foto = $request->ulr_foto;
-        $distribuidora->detalhes_distribuidora = $request->detalhes_distribuidora;
+
+        $request = $request->json()->all();
+        
+        $distribuidora = Distribuidora::find($request['codigo_dist']);
+        $distribuidora->codigo_dist = $request['codigo_dist'];
+        $distribuidora->descricao_dist = $request['descricao_dist'];
 
         DB::transaction(function() use ($distribuidora) {
 
@@ -80,15 +69,10 @@ class DistribuidoraController extends Controller
     }
     public function update_xml(Request $request, Distribuidora $distribuidora)
     {
-        $request = simplexml_load_string($request->getBody());
-        $distribuidora = Distribuidora::find($request->nome_distribuidora);
-        $distribuidora->nome_distribuidora = $request->nome_distribuidora;
-        $distribuidora->data_nasc = $request->data_nasc;
-        $distribuidora->genero = $request->genero;
-        $distribuidora->peso = $request->peso;
-        $distribuidora->altura = $request->altura;
-        $distribuidora->ulr_foto = $request->ulr_foto;
-        $distribuidora->detalhes_distribuidora = $request->detalhes_distribuidora;
+        $xml = simplexml_load_string($request->getContent());
+        $distribuidora = Distribuidora::find($xml->codigo_dist);
+        $distribuidora->codigo_dist = (string)$xml->codigo_dist;
+        $distribuidora->descricao_dist = (string)$xml->descricao_dist;
 
         DB::transaction(function() use ($distribuidora) {
 
@@ -97,23 +81,20 @@ class DistribuidoraController extends Controller
         });
     }
 
-    public function destroy_json(Distribuidora $distribuidora)
+    public function destroy_json(Request $request)
     {
+        $request = $request->json()->all();
         try {
-            $excluir =  Distribuidora::destroy($distribuidora->nome_distribuidora);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Distribuidora::destroy($request['codigo_dist']);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
-    public function destroy_xml(Distribuidora $distribuidora)
+    public function destroy_xml(Request $request)
     {
-        $request = simplexml_load_string($request->getBody());
+        $xml = simplexml_load_string($request->getContent());
         try {
-            $excluir =  Distribuidora::destroy($distribuidora->nome_distribuidora);
-            return response()->json(array('status' => "OK"));
+            $excluir =  Distribuidora::destroy((string)$xml->codigo_dist);
         } catch (\Exception  $erro) {
-            return response()->json(array('erro' => "$erro"));
         }
     }
 }

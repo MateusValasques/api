@@ -9,4 +9,6 @@ class GeneroMusical extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $table = "genero_musical";
+    protected $primaryKey = 'codigo_gene';
 }
